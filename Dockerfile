@@ -1,5 +1,4 @@
-# FROM	ubuntu
-FROM mono
+FROM	ubuntu
 
 LABEL	name=resonite-headless org.opencontainers.image.authors="panther.ru@gmail.com"
 
@@ -18,8 +17,14 @@ ENV	STEAMAPPDIR="${HOMEDIR}/${STEAMAPP}-headless"
 RUN	set -x && \
 	apt -y update && \
 	apt -y upgrade && \
-	apt -y install curl lib32gcc-s1 libopus-dev libopus0 opus-tools libc6-dev dotnet-runtime-8.0 && \
+	apt -y install curl lib32gcc-s1 libopus-dev libopus0 opus-tools libc6-dev dotnet-runtime-8.0 cs-certificates gnupg && \
 	rm -rf /var/lib/{apt,dpkg,cache}
+
+RUN gpg --homedir /tmp --no-default-keyring --keyring /usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+
+RUN echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/ubuntu stable-focal main" | tee /etc/apt/sources.list.d/mono-official-stable.list
+
+RUN apt update && apt install -y mono-devel
 
 # Add locales
 RUN	apt-get update && \
