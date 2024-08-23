@@ -1,4 +1,5 @@
-FROM	ubuntu
+# FROM	ubuntu
+FROM mono
 
 LABEL	name=resonite-headless org.opencontainers.image.authors="panther.ru@gmail.com"
 
