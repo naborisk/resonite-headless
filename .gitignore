@@ -2,3 +2,4 @@ Config/Config.json
 Logs/*.log
 k8s/resonite-config.yaml
 docker-compose.yaml
+.env
