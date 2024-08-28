@@ -59,7 +59,7 @@ RUN wget -P /home/steam/resonite-headless/Libraries https://github.com/resonite-
 COPY --chown=${USER}:${USER} --chmod=755 ./src/download_mods.sh /Scripts/download_mods.sh
 COPY --chown=${USER}:${USER} ./src/default_mod_links.txt /home/steam/resonite-headless/default_mod_links.txt
 
-# デフォルトのMODをダウンロード
+# MODをダウンロード
 RUN /Scripts/download_mods.sh /home/steam/resonite-headless/default_mod_links.txt
 
 COPY --chown=${USER}:${USER} --chmod=755 ./src/setup_resonite.sh ./src/start_resonite.sh /Scripts/
