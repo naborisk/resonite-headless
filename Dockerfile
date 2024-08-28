@@ -52,8 +52,8 @@ RUN groupadd --gid ${USER} steam && \
     chown -R ${USER}:${USER} ${STEAMCMDDIR} ${STEAMAPPDIR} /Config /Logs /home/steam/resonite-headless/Libraries /home/steam/resonite-headless/rml_libs /home/steam/resonite-headless/rml_mods
 
 # ResoniteModLoaderの導入
-RUN wget -P /home/steam/resonite-headless/Libraries https://github.com/resonite-modding-group/ResoniteModLoader/releases/latest/download/ResoniteModLoader.dll && \
-    wget -P /home/steam/resonite-headless/rml_libs https://github.com/resonite-modding-group/ResoniteModLoader/releases/latest/download/0Harmony-Net8.dll && \
+RUN curl -L -o /home/steam/resonite-headless/Libraries/ResoniteModLoader.dll https://github.com/resonite-modding-group/ResoniteModLoader/releases/latest/download/ResoniteModLoader.dll && \
+    curl -L -o /home/steam/resonite-headless/rml_libs/0Harmony-Net8.dll https://github.com/resonite-modding-group/ResoniteModLoader/releases/latest/download/0Harmony-Net8.dll
 
 # MODリンクを管理するファイルとダウンロードスクリプトを追加
 COPY --chown=${USER}:${USER} --chmod=755 ./src/download_mods.sh /Scripts/download_mods.sh
