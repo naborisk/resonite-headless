@@ -35,7 +35,7 @@ RUN apt-get update && \
     update-locale LANG=en_US.UTF-8 && \
     update-locale LANG=en_GB.UTF-8 && \
     rm -rf /var/lib/{apt,dpkg,cache}
-ENV LANG en_GB.UTF-8
+ENV LANG=en_GB.UTF-8
 
 # Create user, install SteamCMD
 RUN groupadd --gid ${USER} steam && \
@@ -46,23 +46,13 @@ RUN groupadd --gid ${USER} steam && \
         --gid ${USER} \
         --uid ${USER} \
         steam && \
-    mkdir -p ${STEAMCMDDIR} ${STEAMAPPDIR} /Config /Logs /Scripts  /home/steam/resonite-headless/Headless/Libraries /home/steam/resonite-headless/Headless/rml_libs /home/steam/resonite-headless/Headless/rml_mods && \
+    mkdir -p ${STEAMCMDDIR} ${STEAMAPPDIR} /Config /Logs /Scripts && \
     cd ${STEAMCMDDIR} && \
     curl -sqL ${STEAMCMDURL} | tar zxfv - && \
-    chown -R ${USER}:${USER} ${STEAMCMDDIR} ${STEAMAPPDIR} /Config /Logs /home/steam/resonite-headless/Headless/Libraries /home/steam/resonite-headless/Headless/rml_libs /home/steam/resonite-headless/Headless/rml_mods
-
-# ResoniteModLoaderの導入
-RUN curl -L -o /home/steam/resonite-headless/Headless/Libraries/ResoniteModLoader.dll https://github.com/resonite-modding-group/ResoniteModLoader/releases/latest/download/ResoniteModLoader.dll && \
-    curl -L -o /home/steam/resonite-headless/Headless/rml_libs/0Harmony-Net8.dll https://github.com/resonite-modding-group/ResoniteModLoader/releases/latest/download/0Harmony-Net8.dll
-
-# MODリンクを管理するファイルとダウンロードスクリプトを追加
-COPY --chown=${USER}:${USER} --chmod=755 ./src/download_mods.sh /Scripts/download_mods.sh
-COPY --chown=${USER}:${USER} ./src/default_mod_links.txt /home/steam/resonite-headless/default_mod_links.txt
-
-# MODをダウンロード
-RUN /Scripts/download_mods.sh /home/steam/resonite-headless/default_mod_links.txt
+    chown -R ${USER}:${USER} ${STEAMCMDDIR} ${STEAMAPPDIR} /Config /Logs
 
 COPY --chown=${USER}:${USER} --chmod=755 ./src/setup_resonite.sh ./src/start_resonite.sh /Scripts/
+COPY --chown=${USER}:${USER} --chmod=755 ./src/download_mods.sh ./src/default_mod_links.txt /Scripts/
 
 # Switch to user
 USER ${USER}
